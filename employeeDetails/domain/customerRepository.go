@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"go.mongodb.org/mongo-driver/mongo"
+	// "io"
+)
 
 type Person struct {
 	Id       string `json:"employeeId"`
@@ -11,8 +15,6 @@ type MongoConnState struct {
 	connState *mongo.Client
 }
 
-type IGetCustomerDetail interface {
-	GetCustomerDetail() ([]Person, error)
+type IPostCustomerDetail interface {
+	PostCustomerDetail(req []interface{}) ([]Person, error)
 }
-
-

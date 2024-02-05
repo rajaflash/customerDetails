@@ -12,11 +12,11 @@ type CustomerHandler struct {
 	Service service.ICustomer
 }
 
-func (ch CustomerHandler) Handler(res http.ResponseWriter, req *http.Request) {
+func (ch CustomerHandler) PostCustomerHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("Inside handler method")
 
-	response := ch.Service.GetCustomer()
-		fmt.Println("struct data", response)
+	response := ch.Service.PostCustomer(req.Body)
+	fmt.Println("struct data", response)
 
 	if req.URL.Query().Get("contentType") == "application/json" {
 		fmt.Println("contentType is Json")

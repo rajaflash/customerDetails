@@ -3,28 +3,23 @@ package domain
 import (
 	"context"
 	"fmt"
-	"log"
-	"os"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	// "io"
+	"log"
+	"os"
 )
 
-//calling mongoDb for testing purpose
-func (p Person) GetCustomerDetail() ([]Person, error) {
-	stubValue := []Person{{"1", "Raj", "Kumbakonam"}, {"1", "Arun", "cuddalore"}}
-	fmt.Println("The stubbed value in repository", stubValue)
-
-	connState := GetMongoDbConnection()
-	testMongoDb := MongoConnState.PostCustomer(connState)
-	fmt.Println("connection tested", testMongoDb)
-
-	return stubValue, nil
-}
-
-func (m MongoConnState) PostCustomer() string {
-	collection := m.connState.Database(os.Getenv("golangDb")).Collection(os.Getenv("customer"))
+func (m MongoConnState) PostCustomerDetail(req []interface{}) ([]Person, error) {
+	fmt.Println("Database")
+	collection := m.connState.Database(os.Getenv("DB_NAME")).Collection(os.Getenv("COLLECTION_NAME"))
 	fmt.Println("ping check", collection)
-	return "hey!!!"
+	res, err := collection.InsertMany(context.Background(), req)
+	if err != nil {
+		fmt.Println("Error while inserting into mongoDB", err)
+	}
+	fmt.Println("Response from posting to database", res)
+	return []Person{{"1", "Raj", "Kumbakonam"}, {"1", "Arun", "cuddalore"}}, nil
 }
 
 func GetMongoDbConnection() MongoConnState {
